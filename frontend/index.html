@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaaS Control de Inventario & Reportes</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Chart.js CDN para los gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <h1>📊 Control de Inventario & Métricas de Negocio</h1>
+        <p>Sistema en tiempo real para gestión de ventas y toma de decisiones</p>
+    </header>
+
+    <main class="container">
+        <!-- SECCIÓN 1: METRICAS Y KPIS -->
+        <section class="kpi-grid">
+            <div class="card kpi">
+                <h3>💰 Ingresos Totales</h3>
+                <p id="kpi-ingresos">$0</p>
+            </div>
+            <div class="card kpi">
+                <h3>📈 Ganancia Neta</h3>
+                <p id="kpi-ganancia">$0</p>
+            </div>
+            <div class="card kpi">
+                <h3>🧾 Transacciones</h3>
+                <p id="kpi-ventas">0</p>
+            </div>
+            <div class="card kpi warning">
+                <h3>⚠️ Stock Crítico</h3>
+                <p id="kpi-stock-critico">0 productos</p>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 2: FORMULARIO DE VENTAS Y GRÁFICO -->
+        <div class="two-columns">
+            <!-- Columna Izquierda: Formularios -->
+            <div class="forms-column">
+                <!-- Formulario 1: Crear Producto -->
+                <section class="card">
+                    <h2>➕ Agregar Nuevo Producto</h2>
+                    <form id="form-producto">
+                        <div class="form-group">
+                            <label for="prod-nombre">Nombre del Producto:</label>
+                            <input type="text" id="prod-nombre" placeholder="Ej: Bebida 1.5L" required>
+                        </div>
+                        <div class="form-grid-2">
+                            <div class="form-group">
+                                <label for="prod-costo">Costo Compra ($):</label>
+                                <input type="number" id="prod-costo" step="0.01" placeholder="500" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="prod-precio">Precio Venta ($):</label>
+                                <input type="number" id="prod-precio" step="0.01" placeholder="1000" required>
+                            </div>
+                        </div>
+                        <div class="form-grid-2">
+                            <div class="form-group">
+                                <label for="prod-stock">Stock Inicial:</label>
+                                <input type="number" id="prod-stock" min="0" placeholder="20" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="prod-minimo">Stock Mínimo (Alerta):</label>
+                                <input type="number" id="prod-minimo" min="1" value="5" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-primary">Guardar Producto</button>
+                    </form>
+                    <div id="mensaje-producto" class="mensaje"></div>
+                </section>
+
+                <!-- Formulario 2: Registrar Venta -->
+                <section class="card">
+                    <h2>🛍️ Registrar Nueva Venta</h2>
+                    <form id="form-venta">
+                        <div class="form-group">
+                            <label for="select-producto">Seleccionar Producto:</label>
+                            <select id="select-producto" required>
+                                <option value="">Cargando productos...</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="input-cantidad">Cantidad a vender:</label>
+                            <input type="number" id="input-cantidad" min="1" value="1" required>
+                        </div>
+                        <button type="submit" class="btn-primary btn-success">Confirmar Venta</button>
+                    </form>
+                    <div id="mensaje-venta" class="mensaje"></div>
+                </section>
+            </div>
+
+            <!-- Columna Derecha: Gráfico -->
+            <section class="card">
+                <h2>🏆 Top Productos Más Vendidos</h2>
+                <div class="chart-container">
+                    <canvas id="chart-top-productos"></canvas>
+                </div>
+            </section>
+        </div>
+
+        <!-- SECCIÓN 3: TABLA DE INVENTARIO -->
+        <section class="card">
+            <h2>📦 Inventario de Productos</h2>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Costo Compra</th>
+                            <th>Precio Venta</th>
+                            <th>Stock Disponible</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-productos">
+                        <!-- Se llena dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
