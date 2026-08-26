@@ -1,4 +1,4 @@
-const API_URL = "https://sistema-inventario-ventas.vercel.app/api"; // Cambiar por tu URL de Render al desplegar
+const API_URL = "[https://sistema-inventario-ventas.vercel.app/api](https://sistema-inventario-ventas.vercel.app/api)"; // Cambiar por tu URL de Render al desplegar
 let chartTopProductos = null;
 let todosLosProductos = [];
 
