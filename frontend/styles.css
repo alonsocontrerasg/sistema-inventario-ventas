@@ -263,6 +263,20 @@ body {
 .btn-primary { background: var(--accent); color: #ffffff; }
 .btn-primary:hover { background: #1d4ed8; }
 
+.btn-sm {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    background: var(--bg-app);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-sm:hover {
+    background: var(--border);
+}
+
 /* Tabla High Contrast */
 table {
     width: 100%;

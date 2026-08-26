@@ -85,6 +85,9 @@ function renderizarTablaProductos(productos) {
                     ${esCritico ? 'Stock Crítico' : 'OK'}
                 </span>
             </td>
+            <td>
+                <button class="btn-sm" onclick="reabastecerProducto(${p.id}, '${p.nombre}')">➕ Stock</button>
+            </td>
         `;
         tbody.appendChild(row);
     });
@@ -211,5 +214,33 @@ async function cargarTopProductos() {
         });
     } catch (err) {
         console.error("Error al cargar gráfico:", err);
+    }
+}
+
+async function reabastecerProducto(id, nombre) {
+    const cantidadStr = prompt(`¿Cuántas unidades deseas sumar al stock de "${nombre}"?`);
+    if (!cantidadStr) return;
+
+    const cantidad = parseInt(cantidadStr);
+    if (isNaN(cantidad) || cantidad <= 0) {
+        alert("Por favor ingresa un número válido mayor a 0");
+        return;
+    }
+
+    try {
+        const res = await fetch(`${API_URL}/productos/${id}/reabastecer`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ cantidad: cantidad })
+        });
+
+        if (res.ok) {
+            cargarProductos();
+            cargarDashboard();
+        } else {
+            alert("Error al actualizar el stock");
+        }
+    } catch (err) {
+        alert("Error de conexión con el servidor");
     }
 }
