@@ -3,126 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SaaS Control de Inventario & Reportes</title>
+    <title>SaaS Inventario | Admin</title>
+    <!-- Fuente Inter para tipografía ultra nítida -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <!-- Chart.js CDN para los gráficos -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <header>
-        <h1>📊 Control de Inventario & Métricas de Negocio</h1>
-        <p>Sistema en tiempo real para gestión de ventas y toma de decisiones</p>
-    </header>
+    <div class="app-layout">
+        <!-- Sidebar de Navegación Lateral -->
+        <aside class="sidebar">
+            <div class="brand">
+                <span class="brand-icon">📦</span>
+                <span class="brand-name">InventoryHQ</span>
+            </div>
+            <nav class="nav-menu">
+                <button class="nav-link active" data-tab="tab-dashboard">
+                    <span>📊</span> Dashboard
+                </button>
+                <button class="nav-link" data-tab="tab-inventario">
+                    <span>📋</span> Inventario
+                </button>
+                <button class="nav-link" data-tab="tab-ventas">
+                    <span>⚡</span> Punto de Venta
+                </button>
+            </nav>
+        </aside>
 
-    <main class="container">
-        <!-- SECCIÓN 1: METRICAS Y KPIS -->
-        <section class="kpi-grid">
-            <div class="card kpi">
-                <h3>💰 Ingresos Totales</h3>
-                <p id="kpi-ingresos">$0</p>
-            </div>
-            <div class="card kpi">
-                <h3>📈 Ganancia Neta</h3>
-                <p id="kpi-ganancia">$0</p>
-            </div>
-            <div class="card kpi">
-                <h3>🧾 Transacciones</h3>
-                <p id="kpi-ventas">0</p>
-            </div>
-            <div class="card kpi warning">
-                <h3>⚠️ Stock Crítico</h3>
-                <p id="kpi-stock-critico">0 productos</p>
-            </div>
-        </section>
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            <!-- Header Superior -->
+            <header class="top-header">
+                <div>
+                    <h1 id="page-title">Dashboard General</h1>
+                    <p class="subtitle">Métricas de negocio e indicadores en tiempo real</p>
+                </div>
+                <div class="status-badge">
+                    <span class="dot"></span> Sistema Online
+                </div>
+            </header>
 
-        <!-- SECCIÓN 2: FORMULARIO DE VENTAS Y GRÁFICO -->
-        <div class="two-columns">
-            <!-- Columna Izquierda: Formularios -->
-            <div class="forms-column">
-                <!-- Formulario 1: Crear Producto -->
-                <section class="card">
-                    <h2>➕ Agregar Nuevo Producto</h2>
-                    <form id="form-producto">
-                        <div class="form-group">
-                            <label for="prod-nombre">Nombre del Producto:</label>
-                            <input type="text" id="prod-nombre" placeholder="Ej: Bebida 1.5L" required>
-                        </div>
-                        <div class="form-grid-2">
-                            <div class="form-group">
-                                <label for="prod-costo">Costo Compra ($):</label>
-                                <input type="number" id="prod-costo" step="0.01" placeholder="500" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="prod-precio">Precio Venta ($):</label>
-                                <input type="number" id="prod-precio" step="0.01" placeholder="1000" required>
-                            </div>
-                        </div>
-                        <div class="form-grid-2">
-                            <div class="form-group">
-                                <label for="prod-stock">Stock Inicial:</label>
-                                <input type="number" id="prod-stock" min="0" placeholder="20" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="prod-minimo">Stock Mínimo (Alerta):</label>
-                                <input type="number" id="prod-minimo" min="1" value="5" required>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn-primary">Guardar Producto</button>
-                    </form>
-                    <div id="mensaje-producto" class="mensaje"></div>
+            <!-- TAB 1: DASHBOARD -->
+            <div id="tab-dashboard" class="tab-content active">
+                <section class="kpi-grid">
+                    <div class="card kpi">
+                        <span class="kpi-label">Ingresos Totales</span>
+                        <p class="kpi-value" id="kpi-ingresos">$0</p>
+                    </div>
+                    <div class="card kpi">
+                        <span class="kpi-label">Ganancia Neta</span>
+                        <p class="kpi-value highlight" id="kpi-ganancia">$0</p>
+                    </div>
+                    <div class="card kpi">
+                        <span class="kpi-label">Transacciones</span>
+                        <p class="kpi-value" id="kpi-ventas">0</p>
+                    </div>
+                    <div class="card kpi warning">
+                        <span class="kpi-label">Stock Crítico</span>
+                        <p class="kpi-value" id="kpi-stock-critico">0</p>
+                    </div>
                 </section>
 
-                <!-- Formulario 2: Registrar Venta -->
-                <section class="card">
+                <section class="card chart-card">
+                    <h2>🏆 Top Productos Más Vendidos</h2>
+                    <div class="chart-container">
+                        <canvas id="chart-top-productos"></canvas>
+                    </div>
+                </section>
+            </div>
+
+            <!-- TAB 2: INVENTARIO -->
+            <div id="tab-inventario" class="tab-content">
+                <div class="two-columns">
+                    <!-- Formulario Nuevo Producto -->
+                    <section class="card">
+                        <h2>➕ Crear Producto</h2>
+                        <form id="form-producto">
+                            <div class="form-group">
+                                <label>Nombre:</label>
+                                <input type="text" id="prod-nombre" placeholder="Ej: Teclado Mecánico" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Costo ($):</label>
+                                    <input type="number" id="prod-costo" step="0.01" placeholder="15000" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Precio Venta ($):</label>
+                                    <input type="number" id="prod-precio" step="0.01" placeholder="25000" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Stock Inicial:</label>
+                                    <input type="number" id="prod-stock" min="0" placeholder="10" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Stock Mínimo:</label>
+                                    <input type="number" id="prod-minimo" min="1" value="5" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-dark">Guardar Producto</button>
+                        </form>
+                        <div id="mensaje-producto" class="mensaje"></div>
+                    </section>
+
+                    <!-- Tabla de Productos + Buscador -->
+                    <section class="card">
+                        <div class="card-header-flex">
+                            <h2>📦 Listado de Stock</h2>
+                            <input type="text" id="input-busqueda" class="input-search" placeholder="🔍 Buscar producto...">
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Producto</th>
+                                        <th>Costo</th>
+                                        <th>Precio</th>
+                                        <th>Stock</th>
+                                        <th>Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla-productos"></tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <!-- TAB 3: PUNTO DE VENTA -->
+            <div id="tab-ventas" class="tab-content">
+                <section class="card form-max-width">
                     <h2>🛍️ Registrar Nueva Venta</h2>
                     <form id="form-venta">
                         <div class="form-group">
-                            <label for="select-producto">Seleccionar Producto:</label>
+                            <label>Producto:</label>
                             <select id="select-producto" required>
-                                <option value="">Cargando productos...</option>
+                                <option value="">Cargando catálogo...</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="input-cantidad">Cantidad a vender:</label>
+                            <label>Cantidad:</label>
                             <input type="number" id="input-cantidad" min="1" value="1" required>
                         </div>
-                        <button type="submit" class="btn-primary btn-success">Confirmar Venta</button>
+                        <button type="submit" class="btn btn-primary">Confirmar Venta</button>
                     </form>
                     <div id="mensaje-venta" class="mensaje"></div>
                 </section>
             </div>
-
-            <!-- Columna Derecha: Gráfico -->
-            <section class="card">
-                <h2>🏆 Top Productos Más Vendidos</h2>
-                <div class="chart-container">
-                    <canvas id="chart-top-productos"></canvas>
-                </div>
-            </section>
-        </div>
-
-        <!-- SECCIÓN 3: TABLA DE INVENTARIO -->
-        <section class="card">
-            <h2>📦 Inventario de Productos</h2>
-            <div class="table-responsive">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Nombre</th>
-                            <th>Costo Compra</th>
-                            <th>Precio Venta</th>
-                            <th>Stock Disponible</th>
-                            <th>Estado</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tabla-productos">
-                        <!-- Se llena dinámicamente -->
-                    </tbody>
-                </table>
-            </div>
-        </section>
-    </main>
+        </main>
+    </div>
 
     <script src="app.js"></script>
 </body>
